@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --files --respawn --transpile-only src/index.ts",
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon"
+    "dev:start": "npx nodemon",
+    "start": "node build/index.js"
   },
   "keywords": [],
   "author": "PRoy",

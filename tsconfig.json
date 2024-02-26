@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    // "outDir": "build",
+    "outDir": "build",
     "strict": true,
     "module": "commonjs",
     "esModuleInterop": true,
