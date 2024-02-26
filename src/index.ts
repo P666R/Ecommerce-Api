@@ -1,11 +1,18 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import { PORT } from './secrets';
 import rootRouter from './routes';
 import { PrismaClient } from '@prisma/client';
 import { errorMiddleware } from './middlewares/errors';
-import { SignUpSchema } from './schema/users';
+import { rateLimit } from 'express-rate-limit';
 
 const app: Express = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(limiter);
 
 app.use(express.json());
 
