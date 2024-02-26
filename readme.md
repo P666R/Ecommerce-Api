@@ -4,7 +4,7 @@
 
 TypeScript enabled Nodejs project.
 Database MySQL.
-Prisma ORM for database interactions (1st attempt).
+Prisma ORM for database interactions.
 Database schema for ecommerce functionality.
 Tried to implement features like product listing, cart management, and user authentication.
 Error Handling via global error handling middleware using custom error classes.
@@ -54,17 +54,20 @@ https://documenter.getpostman.com/view/27141986/2sA2rDwgAU
 
 Clone the project
 git clone https://github.com/P666R/Ecommerce-Api.git
+
 Go to the project directory
 
-Environmental Variables sample at .env.example
+Environmental Variables refer .env.example
 
 Install dependencies
 npm install
 
 Prisma
 npx prisma init
-npx prisma migrate dev --name initial_migration
-npx prisma studio //Opens Prisma GUI
+
+npx prisma migrate dev --name some_name
+
+npx prisma studio for GUI
 
 Start the server
 npm start
