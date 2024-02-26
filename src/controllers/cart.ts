@@ -62,7 +62,6 @@ export const addItemToCart = async (req: Request, res: Response) => {
 };
 
 export const deleteItemFromCart = async (req: Request, res: Response) => {
-  // check if user is deleting its own cart item
   const cartItem = await prismaClient.cartItem.findUnique({
     where: {
       id: +req.params.id,
@@ -85,7 +84,6 @@ export const deleteItemFromCart = async (req: Request, res: Response) => {
 export const changeQuantity = async (req: Request, res: Response) => {
   const validatedData = ChangeQuantitySchema.parse(req.body);
 
-  // check if user is updating its own cart item
   const cartItem = await prismaClient.cartItem.findUnique({
     where: {
       id: +req.params.id,

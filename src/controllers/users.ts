@@ -132,7 +132,6 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const changeUserRole = async (req: Request, res: Response) => {
-  // todo validation
   try {
     const user = await prismaClient.user.update({
       where: {

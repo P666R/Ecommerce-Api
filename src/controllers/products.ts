@@ -5,7 +5,6 @@ import { NotFoundException } from '../exceptions/not-found';
 import { ErrorCode } from '../exceptions/root';
 
 export const createProduct = async (req: Request, res: Response) => {
-  // validator for this request
   CreateProductSchema.parse(req.body);
 
   const product = await prismaClient.product.create({

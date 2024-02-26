@@ -5,15 +5,6 @@ import { ErrorCode } from '../exceptions/root';
 import { UnauthorizedException } from '../exceptions/unauthorized';
 
 export const createOrder = async (req: Request, res: Response) => {
-  // 1. to create a transaction
-  // 2. to list all the cart items and proceed if cart is not empty
-  // 3. calculate the total amount
-  // 4. fetch address of user
-  // 5. to define computed field for formatted address on address module
-  // 6. we will create a order and order productsorder products
-  // 7. create event
-  // 8. to empty the cart
-
   return await prismaClient.$transaction(async (tx) => {
     const cartItems = await tx.cartItem.findMany({
       where: {
@@ -85,9 +76,6 @@ export const listOrders = async (req: Request, res: Response) => {
 };
 
 export const cancelOrder = async (req: Request, res: Response) => {
-  // 1. wrap it inside transaction
-  // 2. check if the user is cancelling its own order
-
   return await prismaClient.$transaction(async (tx) => {
     const order = await tx.order.findUnique({
       where: {

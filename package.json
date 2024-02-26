@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --files --respawn --transpile-only src/index.ts",
-    "build": "tsc",
+    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon"
   },
   "keywords": [],
-  "author": "",
+  "author": "PRoy",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
