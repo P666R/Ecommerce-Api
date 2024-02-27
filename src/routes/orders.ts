@@ -14,30 +14,28 @@ import adminMiddleware from '../middlewares/admin';
 
 const orderRoutes: Router = Router();
 
-orderRoutes.post('/', [authMiddleware], errorHandler(createOrder));
+// Use the authMiddleware for all routes defined below
+orderRoutes.use(authMiddleware);
 
-orderRoutes.get('/', [authMiddleware], errorHandler(listOrders));
+// Set up the route for creating an order
+orderRoutes.post('/', errorHandler(createOrder));
 
-orderRoutes.put('/:id/cancel', [authMiddleware], errorHandler(cancelOrder));
+// Set up the route for getting a list of orders
+orderRoutes.get('/', errorHandler(listOrders));
 
-orderRoutes.get(
-  '/index',
-  [authMiddleware, adminMiddleware],
-  errorHandler(listAllOrders)
-);
+// Set up the route for canceling an order
+orderRoutes.put('/:id/cancel', errorHandler(cancelOrder));
 
-orderRoutes.get(
-  '/users/:id',
-  [authMiddleware, adminMiddleware],
-  errorHandler(listUserOrders)
-);
+// Set up the route for getting a list of all orders
+orderRoutes.get('/index', [adminMiddleware], errorHandler(listAllOrders));
 
-orderRoutes.put(
-  '/:id/status',
-  [authMiddleware, adminMiddleware],
-  errorHandler(changeStatus)
-);
+// Set up the route for getting a list of orders by user
+orderRoutes.get('/users/:id', [adminMiddleware], errorHandler(listUserOrders));
 
-orderRoutes.get('/:id', [authMiddleware], errorHandler(getOrderById));
+// Set up the route for changing the status of an order
+orderRoutes.put('/:id/status', [adminMiddleware], errorHandler(changeStatus));
+
+// Set up the route for getting an order by ID
+orderRoutes.get('/:id', errorHandler(getOrderById));
 
 export default orderRoutes;

@@ -4,8 +4,11 @@ import { NotFoundException } from '../exceptions/not-found';
 import { ErrorCode } from '../exceptions/root';
 import { UnauthorizedException } from '../exceptions/unauthorized';
 
+// Controller to create an order
 export const createOrder = async (req: Request, res: Response) => {
-  return await prismaClient.$transaction(async (tx) => {
+  // Begin a database transaction
+  await prismaClient.$transaction(async (tx) => {
+    // Retrieve the items in the user's cart along with the associated product details
     const cartItems = await tx.cartItem.findMany({
       where: {
         userId: req.user!.id,
@@ -15,24 +18,29 @@ export const createOrder = async (req: Request, res: Response) => {
       },
     });
 
+    // If the cart is empty, return a message and exit the function
     if (cartItems.length === 0) {
       return res.json({ message: 'Cart is empty!' });
     }
 
+    // Calculate the total price of the items in the cart
     const price = cartItems.reduce((prev, current) => {
       return prev + current.quantity * +current.product.price;
     }, 0);
 
+    // Retrieve the default shipping address of the user
     const address = await tx.address.findFirst({
       where: {
         id: req.user!.defaultShippingAddress ?? 0,
       },
     });
 
+    // Format the address for display
     const formattedAddress = address
       ? `${address.lineOne}, ${address.lineTwo}, ${address.city}, ${address.country}-${address.pincode}`
       : '';
 
+    // Create a new order in the database and create entry in orderProduct with the productId and quantity for each item in cart
     const order = await tx.order.create({
       data: {
         userId: req.user!.id,
@@ -49,22 +57,26 @@ export const createOrder = async (req: Request, res: Response) => {
       },
     });
 
-    const orderEvent = await tx.orderEvent.create({
+    // Create an order event in the database
+    await tx.orderEvent.create({
       data: {
         orderId: order.id,
       },
     });
 
+    // Remove the items from the user's cart as they have been successfully ordered
     await tx.cartItem.deleteMany({
       where: {
         userId: req.user!.id,
       },
     });
 
+    // Return the created order as the response
     return res.json(order);
   });
 };
 
+// Controller to get the orders
 export const listOrders = async (req: Request, res: Response) => {
   const orders = await prismaClient.order.findMany({
     where: {
@@ -75,6 +87,7 @@ export const listOrders = async (req: Request, res: Response) => {
   res.json(orders);
 };
 
+// Controller to cancel an order
 export const cancelOrder = async (req: Request, res: Response) => {
   return await prismaClient.$transaction(async (tx) => {
     const order = await tx.order.findUnique({
@@ -114,6 +127,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
   });
 };
 
+// Controller to get an order by ID
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const order = await prismaClient.order.findFirstOrThrow({
@@ -132,6 +146,7 @@ export const getOrderById = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to get all orders
 export const listAllOrders = async (req: Request, res: Response) => {
   let whereClause = {};
 
@@ -151,6 +166,7 @@ export const listAllOrders = async (req: Request, res: Response) => {
   res.json(orders);
 };
 
+// Controller to change the status of an order
 export const changeStatus = async (req: Request, res: Response) => {
   return await prismaClient.$transaction(async (tx) => {
     try {
@@ -180,6 +196,7 @@ export const changeStatus = async (req: Request, res: Response) => {
   });
 };
 
+// Controller to get a list of orders by user
 export const listUserOrders = async (req: Request, res: Response) => {
   let whereClause: any = {
     userId: +req.params.id,
