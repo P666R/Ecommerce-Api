@@ -5,7 +5,16 @@ import { NotFoundException } from '../exceptions/not-found';
 import { ErrorCode } from '../exceptions/root';
 import { Address } from '@prisma/client';
 import { BadRequestsException } from '../exceptions/bad-requests';
+import { User } from '@prisma/client';
 
+// Function to exclude specified keys from a user object
+function exclude(user: User, keys: string[]) {
+  return Object.fromEntries(
+    Object.entries(user).filter(([key]) => !keys.includes(key))
+  );
+}
+
+// Controller to add an address for the current user
 export const addAddress = async (req: Request, res: Response) => {
   AddressSchema.parse(req.body);
 
@@ -19,6 +28,7 @@ export const addAddress = async (req: Request, res: Response) => {
   res.json(address);
 };
 
+// Controller to delete an address by ID
 export const deleteAddress = async (req: Request, res: Response) => {
   try {
     await prismaClient.address.delete({
@@ -36,6 +46,7 @@ export const deleteAddress = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to get a list of addresses for the current user
 export const listAddress = async (req: Request, res: Response) => {
   const addresses = await prismaClient.address.findMany({
     where: {
@@ -46,8 +57,10 @@ export const listAddress = async (req: Request, res: Response) => {
   res.json(addresses);
 };
 
+// Controller to update the current user shipping and billing addresses
 export const updateUser = async (req: Request, res: Response) => {
   const validatedData = UpdateUserSchema.parse(req.body);
+
   let shippingAddress: Address;
   let billingAddress: Address;
 
@@ -102,18 +115,26 @@ export const updateUser = async (req: Request, res: Response) => {
     data: validatedData,
   });
 
-  res.json(updatedUser);
+  const userWithoutPassword = exclude(updatedUser, ['password']);
+
+  res.json(userWithoutPassword);
 };
 
+// Controller to get a list of users
 export const listUsers = async (req: Request, res: Response) => {
   const users = await prismaClient.user.findMany({
     skip: req.query.skip ? +req.query.skip : 0,
     take: req.query.take ? +req.query.take : 5,
   });
 
-  res.json(users);
+  const usersWithoutPassword = users.map((user) => {
+    return exclude(user, ['password']);
+  });
+
+  res.json(usersWithoutPassword);
 };
 
+// Controller to get a specific user by ID
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await prismaClient.user.findFirstOrThrow({
@@ -125,12 +146,15 @@ export const getUserById = async (req: Request, res: Response) => {
       },
     });
 
-    res.json(user);
+    const userWithoutPassword = exclude(user, ['password']);
+
+    res.json(userWithoutPassword);
   } catch (error) {
     throw new NotFoundException('User not found!', ErrorCode.USER_NOT_FOUND);
   }
 };
 
+// Controller to change a user's role
 export const changeUserRole = async (req: Request, res: Response) => {
   try {
     const user = await prismaClient.user.update({
@@ -142,7 +166,9 @@ export const changeUserRole = async (req: Request, res: Response) => {
       },
     });
 
-    res.json(user);
+    const userWithoutPassword = exclude(user, ['password']);
+
+    res.json(userWithoutPassword);
   } catch (error) {
     throw new NotFoundException('User not found!', ErrorCode.USER_NOT_FOUND);
   }
