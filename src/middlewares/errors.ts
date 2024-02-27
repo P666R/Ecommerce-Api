@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../exceptions/root';
 
+// Global error handling middleware
 export const errorMiddleware = (
   error: HttpException,
   req: Request,
