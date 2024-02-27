@@ -14,30 +14,22 @@ import {
 
 const userRoutes: Router = Router();
 
-userRoutes.post('/address', [authMiddleware], errorHandler(addAddress));
+userRoutes.use(authMiddleware);
 
-userRoutes.delete(
-  '/address/:id',
-  [authMiddleware],
-  errorHandler(deleteAddress)
-);
+userRoutes.post('/address', errorHandler(addAddress));
 
-userRoutes.get('/address', [authMiddleware], errorHandler(listAddress));
+userRoutes.delete('/address/:id', errorHandler(deleteAddress));
 
-userRoutes.put('/', [authMiddleware], errorHandler(updateUser));
+userRoutes.get('/address', errorHandler(listAddress));
 
-userRoutes.put(
-  '/:id/role',
-  [authMiddleware, adminMiddleware],
-  errorHandler(changeUserRole)
-);
+userRoutes.put('/', errorHandler(updateUser));
 
-userRoutes.get('/', [authMiddleware, adminMiddleware], errorHandler(listUsers));
+userRoutes.use(adminMiddleware);
 
-userRoutes.get(
-  '/:id',
-  [authMiddleware, adminMiddleware],
-  errorHandler(getUserById)
-);
+userRoutes.put('/:id/role', errorHandler(changeUserRole));
+
+userRoutes.get('/', errorHandler(listUsers));
+
+userRoutes.get('/:id', errorHandler(getUserById));
 
 export default userRoutes;
