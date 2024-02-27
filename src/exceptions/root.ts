@@ -1,5 +1,4 @@
-// message, status code, error codes, error
-
+// Define a custom HttpException class that extends the Error class
 export class HttpException extends Error {
   message: string;
   errorCode: any;
@@ -20,6 +19,7 @@ export class HttpException extends Error {
   }
 }
 
+// Define a custom ErrorCode enum
 export enum ErrorCode {
   USER_NOT_FOUND = 1001,
   USER_ALREADY_EXISTS = 1002,
