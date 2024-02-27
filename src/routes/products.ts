@@ -12,34 +12,22 @@ import adminMiddleware from '../middlewares/admin';
 
 const productsRoutes: Router = Router();
 
-productsRoutes.post(
-  '/',
-  [authMiddleware, adminMiddleware],
-  errorHandler(createProduct)
-);
+// Set up the route for getting a list of products (publicly accessible route)
+productsRoutes.get('/', errorHandler(listProducts));
 
-productsRoutes.put(
-  '/:id',
-  [authMiddleware, adminMiddleware],
-  errorHandler(updateProduct)
-);
+// Set up the route for getting a specific product (publicly accessible route)
+productsRoutes.get('/:id', errorHandler(getProductById));
 
-productsRoutes.delete(
-  '/:id',
-  [authMiddleware, adminMiddleware],
-  errorHandler(deleteProduct)
-);
+// Use the authMiddleware and adminMiddleware for all routes defined below
+productsRoutes.use(authMiddleware, adminMiddleware);
 
-productsRoutes.get(
-  '/',
-  [authMiddleware, adminMiddleware],
-  errorHandler(listProducts)
-);
+// Set up the route for creating a product
+productsRoutes.post('/', errorHandler(createProduct));
 
-productsRoutes.get(
-  '/:id',
-  [authMiddleware, adminMiddleware],
-  errorHandler(getProductById)
-);
+// Set up the route for updating a product
+productsRoutes.put('/:id', errorHandler(updateProduct));
+
+// Set up the route for deleting a product
+productsRoutes.delete('/:id', errorHandler(deleteProduct));
 
 export default productsRoutes;

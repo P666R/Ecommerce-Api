@@ -4,6 +4,7 @@ import { CreateProductSchema } from '../schema/products';
 import { NotFoundException } from '../exceptions/not-found';
 import { ErrorCode } from '../exceptions/root';
 
+// Controller to create a new product
 export const createProduct = async (req: Request, res: Response) => {
   CreateProductSchema.parse(req.body);
 
@@ -17,6 +18,7 @@ export const createProduct = async (req: Request, res: Response) => {
   res.json(product);
 };
 
+// Controller to update an existing product
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const product = req.body;
@@ -40,6 +42,7 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to delete an existing product
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const deletedProduct = await prismaClient.product.delete({
@@ -57,6 +60,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
 };
 
+// Controller to get a list of products
 export const listProducts = async (req: Request, res: Response) => {
   const count = await prismaClient.product.count();
 
@@ -68,6 +72,7 @@ export const listProducts = async (req: Request, res: Response) => {
   res.json({ count, data: products });
 };
 
+// Controller to get a specific product by ID
 export const getProductById = async (req: Request, res: Response) => {
   try {
     const product = await prismaClient.product.findFirstOrThrow({
