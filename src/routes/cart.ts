@@ -10,12 +10,19 @@ import {
 
 const cartRoutes: Router = Router();
 
-cartRoutes.post('/', [authMiddleware], errorHandler(addItemToCart));
+// Use the authMiddleware for all routes defined below
+cartRoutes.use(authMiddleware);
 
-cartRoutes.get('/', [authMiddleware], errorHandler(getCart));
+// Set up the route for adding an item to the cart
+cartRoutes.post('/', errorHandler(addItemToCart));
 
-cartRoutes.delete('/:id', [authMiddleware], errorHandler(deleteItemFromCart));
+// Set up the route for getting the cart
+cartRoutes.get('/', errorHandler(getCart));
 
-cartRoutes.put('/:id', [authMiddleware], errorHandler(changeQuantity));
+// Set up the route for deleting an item from the cart
+cartRoutes.delete('/:id', errorHandler(deleteItemFromCart));
+
+// Set up the route for changing the quantity of an item in the cart
+cartRoutes.put('/:id', errorHandler(changeQuantity));
 
 export default cartRoutes;

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2015",
     "outDir": "build",
-    "strict": false,
+    "strict": true,
     "module": "commonjs",
     "esModuleInterop": true,
     "experimentalDecorators": true,

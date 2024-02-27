@@ -6,6 +6,7 @@ import { Product, CartItem } from '@prisma/client';
 import { prismaClient } from '..';
 import { UnauthorizedException } from '../exceptions/unauthorized';
 
+// Controller to add an item to the cart
 export const addItemToCart = async (req: Request, res: Response) => {
   const validatedData = CreateCartSchema.parse(req.body);
 
@@ -35,7 +36,7 @@ export const addItemToCart = async (req: Request, res: Response) => {
 
   let product: Product;
 
-  // If the product is not in the cart, fetch the product details
+  // If the product is not in the cart, check if the product exists
   try {
     product = await prismaClient.product.findFirstOrThrow({
       where: {
@@ -61,6 +62,7 @@ export const addItemToCart = async (req: Request, res: Response) => {
   res.json(cart);
 };
 
+// Controller to delete an item from the cart
 export const deleteItemFromCart = async (req: Request, res: Response) => {
   const cartItem = await prismaClient.cartItem.findUnique({
     where: {
@@ -68,6 +70,7 @@ export const deleteItemFromCart = async (req: Request, res: Response) => {
     },
   });
 
+  // Check if the user is authorized to delete the cart item
   if (!cartItem || cartItem.userId !== req.user!.id) {
     throw new UnauthorizedException('Unauthorized!', ErrorCode.UNAUTHORIZED);
   }
@@ -81,6 +84,7 @@ export const deleteItemFromCart = async (req: Request, res: Response) => {
   res.json({ success: true });
 };
 
+// Controller to change the quantity of an item in the cart
 export const changeQuantity = async (req: Request, res: Response) => {
   const validatedData = ChangeQuantitySchema.parse(req.body);
 
@@ -90,6 +94,7 @@ export const changeQuantity = async (req: Request, res: Response) => {
     },
   });
 
+  // Check if the user is authorized to change the quantity of the cart item
   if (!cartItem || cartItem.userId !== req.user!.id) {
     throw new UnauthorizedException('Unauthorized!', ErrorCode.UNAUTHORIZED);
   }
@@ -106,6 +111,7 @@ export const changeQuantity = async (req: Request, res: Response) => {
   res.json(updatedCart);
 };
 
+// Controller to get the cart
 export const getCart = async (req: Request, res: Response) => {
   const cart = await prismaClient.cartItem.findMany({
     where: {
