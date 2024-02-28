@@ -64,15 +64,27 @@ model Product {
   id Int @id @default(autoincrement())
   name String
   description String @db.Text
-  price Decimal
+  price Decimal @db.Decimal(10,2)
   tags String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   cartItems CartItem[]
   orders OrderProduct[]
+  categories Category[]
 
   @@map("products")
+}
+
+model Category{
+  id Int @id @default(autoincrement())
+  name String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@map("categories")
 }
 
 model CartItem {
@@ -92,7 +104,7 @@ model Order {
   id Int @id @default(autoincrement())
   userId Int
   user User @relation(fields: [userId], references: [id])
-  netAmount Decimal
+  netAmount Decimal @db.Decimal(10,2)
   address String
   status OrderEventStatus @default(PENDING)
   createdAt DateTime @default(now())

@@ -6,11 +6,19 @@ import {
   getProductById,
   listProducts,
   updateProduct,
+  listCategories,
+  listProductsByCategory,
 } from '../controllers/products';
 import authMiddleware from '../middlewares/auth';
 import adminMiddleware from '../middlewares/admin';
 
 const productsRoutes: Router = Router();
+
+// Set up the route for getting a list of categories (publicly accessible route)
+productsRoutes.get('/categories', errorHandler(listCategories));
+
+// Set up the route for getting a list of products by category (publicly accessible route)
+productsRoutes.get('/categories/:id', errorHandler(listProductsByCategory));
 
 // Set up the route for getting a list of products (publicly accessible route)
 productsRoutes.get('/', errorHandler(listProducts));

@@ -46,7 +46,7 @@ Connects orders to specific products with quantities.
 Represents events in the lifecycle of an order, such as acceptance or cancellation.
 Connected to a specific order.
 
-## Postman Documentation link
+## Postman API Documentation link
 
 https://documenter.getpostman.com/view/27141986/2sA2rDwgAU
 
