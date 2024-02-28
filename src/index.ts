@@ -1,27 +1,26 @@
-// Import the express library and the Express type from the 'express' package
 import express, { Express } from 'express';
-// Import the rateLimit function from the 'express-rate-limit' package
+import { tokenBucketRatelimiter } from './util/tokenBucketRateLimiter';
 import { rateLimit } from 'express-rate-limit';
-// Import the PrismaClient class from the '@prisma/client' package
 import { PrismaClient } from '@prisma/client';
-// Import the PORT constant from the 'secrets' file
 import { PORT } from './secrets';
-// Import the rootRouter from the 'routes' file
 import rootRouter from './routes';
-// Import the errorMiddleware function from the 'errors' middleware file
 import { errorMiddleware } from './middlewares/errors';
 
 // Create an express application
 const app: Express = express();
 
 // Create a rate limiter middleware with a window of 15 minutes and a maximum of 100 requests
-const limiter = rateLimit({
+const globalRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
 
-// Use the rate limiter middleware
-app.use(limiter);
+// Use the global rate limiter middleware
+app.use(globalRateLimiter);
+
+// Use the custom token bucket rate limiter middleware
+// It only works for logged in users based on the user's ID extracted from the JWT token
+app.use(tokenBucketRatelimiter);
 
 // Parse incoming JSON data
 app.use(express.json());

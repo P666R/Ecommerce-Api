@@ -12,7 +12,6 @@ import {
   getUserById,
 } from '../controllers/users';
 
-// Create a Router instance
 const userRoutes: Router = Router();
 
 // Use the authMiddleware for all routes defined below
