@@ -2,12 +2,15 @@
 
 ## Features
 
-TypeScript enabled Nodejs project.
-Database MySQL.
-Prisma ORM for database interactions.
-Database schema for ecommerce functionality.
-Tried to implement features like product listing, cart management, and user authentication.
-Error Handling via global error handling middleware using custom error classes.
+- TypeScript enabled Nodejs project
+- Database MySQL
+- Prisma ORM for database interaction
+- Database schema for ecommerce functionality
+- Implement features like product listing, category listing, cart management, order management and user authentication
+- Error Handling via global error handling middleware using custom error classes
+- Feature to set custon error codes for frontend use
+- Global rate limiting for all
+- Custom token bucket rate limiting MW using Redis for logged in users for implmentation in specific routes of choice
 
 ## Database Models Overview
 
@@ -26,6 +29,11 @@ Belongs to a specific user.
 
 Represents a product with a name, description, price, and tags.
 Connected to cart items and orders.
+
+### Category:
+
+Represents categories linked to products, created based on products tags.
+Connected to products.
 
 ### CartItem:
 
@@ -52,22 +60,26 @@ https://documenter.getpostman.com/view/27141986/2sA2rDwgAU
 
 ## Installation
 
-Clone the project
+Clone the project: <br>
 git clone https://github.com/P666R/Ecommerce-Api.git
 
 Go to the project directory
 
-Environmental Variables refer .env.example
+Environmental Variables: <br>
+refer .env.example
 
-Install dependencies
+Install dependencies: <br>
 npm install
 
-Prisma
+Prisma: <br>
 npx prisma init
 
 npx prisma migrate dev --name some_name
 
 npx prisma studio for GUI
 
-Start the server
-npm start
+Start redis server: <br>
+sudo service redis-server start
+
+Start the dev server: <br>
+npm run dev:start

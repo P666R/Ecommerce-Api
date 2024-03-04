@@ -19,7 +19,8 @@ const globalRateLimiter = rateLimit({
 app.use(globalRateLimiter);
 
 // Use the custom token bucket rate limiter middleware
-// It only works for logged in users based on the user's ID extracted from the JWT token
+// Works for logged in users based on the user's ID extracted from the JWT token
+// Can be set to routes of choice as per the requirements
 app.use(tokenBucketRatelimiter);
 
 // Parse incoming JSON data
